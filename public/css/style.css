@@ -1,0 +1,19 @@
+.calendar
+{
+	width: 100%;
+	height: 600px;
+}
+
+.calendar td
+{
+	padding: 20px;
+	border: 1px solid #5F8CA3;
+	vertical-align: top;
+	width: 14.29%;
+	height: 20%;
+}
+
+.calendar-6weeks td
+{
+	height: 16.66%;
+}
