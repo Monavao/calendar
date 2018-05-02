@@ -17,3 +17,21 @@
 {
 	height: 16.66%;
 }
+
+.weekday
+{
+	font-weight: bold;
+	color: black;
+	font-size: 17px;
+}
+
+.day
+{
+	color: black;
+	opacity: 1.0;
+}
+
+.outOfMonth
+{
+	opacity: 0.5;
+}

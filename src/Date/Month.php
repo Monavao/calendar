@@ -2,10 +2,20 @@
 
 namespace Calendar\Date;
 
-use Exception;
+//use Exception;
 
 class Month
 {
+	public $days = [
+		'Lundi',
+		'Mardi',
+		'Mercredi',
+		'Jeudi',
+		'Vendredi',
+		'Samedi',
+		'Dimanche'
+	];
+
 	private $months = [
 		'Janvier', 
 		'Février', 
@@ -21,8 +31,8 @@ class Month
 		'Décembre'
 	];
 
-	private $month;
-	private $year;
+	public $month;
+	public $year;
 
 	/**
 	 * Month's constructor
@@ -32,7 +42,7 @@ class Month
 	 */
 	public function __construct(?int $month = null, ?int $year = null)
 	{
-		if($month === null || $month <= 0)
+		if($month === null || $month < 1 || $month > 12)
 		{
 			$month = intval(date('m'));
 		}
@@ -41,8 +51,6 @@ class Month
 		{
 			$year = intval(date('Y'));
 		}
-
-		$month = abs($month % 12);
 
 		/*
 		if($month < 1 || $month > 12)
@@ -59,7 +67,7 @@ class Month
 	 * Return first day of the month
 	 * @return \Datetime
 	 */
-	public function getFirstDay() :\DateTime
+	public function getFirstDay() : \DateTime
 	{
 		return new \DateTime("{$this->year}-{$this->month}-01");
 	}
@@ -92,5 +100,51 @@ class Month
 		}
 
 		return $weeks;
+	}
+
+	/**
+	 * Return true if days is in currently month
+	 * @param \Datetime $date 
+	 * @return bool
+	 */
+	public function inMonth(\Datetime $date) : bool
+	{
+		return $this->getFirstDay()->format('Y-m') === $date->format('Y-m');
+	}
+
+	/**
+	 * Return the next month and the next year if necessary
+	 * @return Month
+	 */
+	public function nextMonth() : Month
+	{
+		$month = $this->month + 1;
+		$year = $this->year;
+
+		if($month > 12)
+		{
+			$month = 1;
+			$year += 1;
+		}
+
+		return new Month($month, $year);
+	}
+
+	/**
+	 * Return the previous month and the previous year if necessary
+	 * @return Month
+	 */
+	public function previousMonth() : Month
+	{
+		$month = $this->month - 1;
+		$year = $this->year;
+
+		if($month < 1)
+		{
+			$month = 12;
+			$year -= 1;
+		}
+
+		return new Month($month, $year);
 	}
 }
