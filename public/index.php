@@ -13,6 +13,7 @@
 
 	<?php
 		require '../src/Date/Month.php';
+		require '../src/Date/Events.php';
 
 		/*try
 		{
@@ -23,8 +24,15 @@
 			$month = new Calendar\Date\Month();
 		}*/
 
+		$events = new Calendar\Date\Events();
 		$month = new Calendar\Date\Month($_GET['month'] ?? null, $_GET['year'] ?? null);
-		$start = $month->getFirstDay()->modify('last monday');
+		$start = $month->getFirstDay();
+		$start = $start->format('N') === '1' ? $start : $month->getFirstDay()->modify('last monday');
+		$weeks = $month->getWeeks();
+		$end = (clone $start)->modify('+' . (6 + ((7 * $weeks) -1)) . 'days');
+		//var_dump($end);
+		$events = $events->getEventsByDay($start, $end);
+		var_dump($events);
 	?>
 
 	<div class="d-flex flex-row align-items-center justify-content-between mx-sm-3">
@@ -35,8 +43,8 @@
 		</div>
 	</div>
 	
-	<table class="calendar calendar-<?= $month->getWeeks() ?>weeks">
-		<?php for($i = 0; $i < $month->getWeeks(); $i++): ?>
+	<table class="calendar calendar-<?= $weeks ?>weeks">
+		<?php for($i = 0; $i < $weeks; $i++): ?>
 		<tr>
 			<?php 
 				foreach($month->days as $k => $day):
