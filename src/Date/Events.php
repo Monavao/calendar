@@ -8,8 +8,8 @@ class Events
 {
 	/**
 	 * Get elements between two dates
-	 * @param \DateTime $start 
-	 * @param \Datetime $end 
+	 * @param \DateTime $start
+	 * @param \Datetime $end
 	 * @return array
 	 */
 	public function getEvents(\DateTime $start, \Datetime $end) : array
@@ -30,8 +30,8 @@ class Events
 
 	/**
 	 * Get elements between two dates by day
-	 * @param \DateTime $start 
-	 * @param \Datetime $end 
+	 * @param \DateTime $start
+	 * @param \Datetime $end
 	 * @return array
 	 */
 	public function getEventsByDay(\DateTime $start, \Datetime $end) : array
@@ -41,7 +41,7 @@ class Events
 
 		foreach ($events as $event)
 		{
-			$date = explode('', $event[start])[0];
+			$date = explode('', $event['start'])[0];
 
 			if(!isset($days[$date]))
 			{
@@ -52,5 +52,7 @@ class Events
 				$days[$date][] = $event;
 			}
 		}
+
+		return $days;
 	}
 }

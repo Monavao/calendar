@@ -14,7 +14,7 @@ class Month
 		'Vendredi',
 		'Samedi',
 		'Dimanche'
-	];
+    ];
 
 	private $months = [
 		'Janvier', 
@@ -29,7 +29,7 @@ class Month
 		'Octobre', 
 		'Novembre', 
 		'Décembre'
-	];
+    ];
 
 	public $month;
 	public $year;
@@ -37,8 +37,8 @@ class Month
 	/**
 	 * Month's constructor
 	 * @param int $month between 1 and 12
-	 * @param int $year 
-	 * @throws Exception
+	 * @param int $year
+	 * @throws \Exception
 	 */
 	public function __construct(?int $month = null, ?int $year = null)
 	{
@@ -112,10 +112,11 @@ class Month
 		return $this->getFirstDay()->format('Y-m') === $date->format('Y-m');
 	}
 
-	/**
-	 * Return the next month and the next year if necessary
-	 * @return Month
-	 */
+    /**
+     * Return the next month and the next year if necessary
+     * @return Month
+     * @throws \Exception
+     */
 	public function nextMonth() : Month
 	{
 		$month = $this->month + 1;
@@ -133,6 +134,7 @@ class Month
 	/**
 	 * Return the previous month and the previous year if necessary
 	 * @return Month
+     * @throws \Exception
 	 */
 	public function previousMonth() : Month
 	{

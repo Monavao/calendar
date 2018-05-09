@@ -48,7 +48,7 @@
 		<tr>
 			<?php 
 				foreach($month->days as $k => $day):
-				$date = (clone $start)->modify("+" . $k + ($i * 7) . "days")
+				$date = (clone $start)->modify('+'. ($k + ($i * 7)) . "days")
 			?>
 			<td>
 				<?php if($i === 0): ?>
