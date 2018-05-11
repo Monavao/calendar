@@ -20,11 +20,8 @@ class Events
 		]);
 
 		$req = "SELECT * FROM events WHERE start BETWEEN '{$start->format('Y-m-d 00:00:00')}' AND '{$end->format('Y-m-d 23:59:59')}'";
-		$statement = $pdo->query($req);
-		$result = $statement->fetchAll();
-
-		//var_dump($req);
-
+		$stm = $pdo->query($req);
+		$result = $stm->fetchAll();
 		return $result;
 	}
 
@@ -41,7 +38,7 @@ class Events
 
 		foreach ($events as $event)
 		{
-			$date = explode('', $event['start'])[0];
+			$date = explode(' ', $event['start'])[0];
 
 			if(!isset($days[$date]))
 			{

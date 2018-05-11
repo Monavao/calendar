@@ -52,13 +52,6 @@ class Month
 			$year = intval(date('Y'));
 		}
 
-		/*
-		if($month < 1 || $month > 12)
-		{
-			throw new Exception('Invalid month');
-		}
-		*/
-
 		$this->month = $month;
 		$this->year = $year;
 	}
@@ -89,9 +82,6 @@ class Month
 	{
 		$start = $this->getFirstDay();
 		$end = (clone $start)->modify('+1 month -1 day');
-
-		//var_dump($end->format('W'), $start->format('W'));
-		
 		$weeks = intval($end->format('W')) - intval($start->format('W')) + 1;
 
 		if($weeks < 0)
