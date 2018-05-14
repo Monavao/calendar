@@ -3,9 +3,17 @@
 namespace Calendar\Date;
 
 use \PDO;
+use \Exception;
 
 class Events
 {
+	private $pdo;
+
+	public function __construct(PDO $pdo)
+	{
+		$this->pdo = $pdo;
+	}
+
 	/**
 	 * Get elements between two dates
 	 * @param \DateTime $start
@@ -14,14 +22,10 @@ class Events
 	 */
 	public function getEvents(\DateTime $start, \Datetime $end) : array
 	{
-		$pdo = new PDO('mysql:host=localhost;dbname=calendar', 'root', 'root',[
-			PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-			PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
-		]);
-
 		$req = "SELECT * FROM events WHERE start BETWEEN '{$start->format('Y-m-d 00:00:00')}' AND '{$end->format('Y-m-d 23:59:59')}'";
-		$stm = $pdo->query($req);
+		$stm = $this->pdo->query($req);
 		$result = $stm->fetchAll();
+
 		return $result;
 	}
 
@@ -51,5 +55,26 @@ class Events
 		}
 
 		return $days;
+	}
+
+	/**
+	 * Get an event
+	 * @param int $id 
+	 * @return Event
+	 * @throws \Exception
+	 */	
+	public function find(int $id) : Event
+	{
+		require 'Event.php';
+		$stm = $this->pdo->query("SELECT * FROM events WHERE id = $id");
+		$stm->setFetchMode(PDO::FETCH_CLASS, Event::class);
+		$result = $stm->fetch();
+
+		if($result === false)
+		{
+			throw new Exception('Aucun résultat trouvé');
+		}
+
+		return $result;
 	}
 }

@@ -2,8 +2,6 @@
 
 namespace Calendar\Date;
 
-//use Exception;
-
 class Month
 {
 	public $days = [
@@ -105,7 +103,6 @@ class Month
     /**
      * Return the next month and the next year if necessary
      * @return Month
-     * @throws \Exception
      */
 	public function nextMonth() : Month
 	{
