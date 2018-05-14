@@ -8,7 +8,8 @@
     ],
     "autoload": {
     	"psr-4": {
-    		"Calendar\\": "src/"
+    		"Calendar\\": "src/",
+            "App\\": "src/App"
     	}
     },
     "require": {}

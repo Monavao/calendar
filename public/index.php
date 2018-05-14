@@ -1,18 +1,20 @@
 <?php
-	require '../src/Init.php';
 
-	use Calendar\Date\{Events, Month};
+require '../src/Init.php';
 
-	$pdo = getPDO();
-	$events = new Events($pdo);
-	$month = new Month($_GET['month'] ?? null, $_GET['year'] ?? null);
-	$start = $month->getFirstDay();
-	$start = $start->format('N') === '1' ? $start : $month->getFirstDay()->modify('last monday');
-	$weeks = $month->getWeeks();
-	$end = (clone $start)->modify('+' . (6 + ((7 * $weeks) -1)) . 'days');
-	$events = $events->getEventsByDay($start, $end);
+use Calendar\Date\{Events, Month};
 
-	require '../views/header.php';
+$pdo = getPDO();
+$events = new Events($pdo);
+$month = new Month($_GET['month'] ?? null, $_GET['year'] ?? null);
+$start = $month->getFirstDay();
+$start = $start->format('N') === '1' ? $start : $month->getFirstDay()->modify('last monday');
+$weeks = $month->getWeeks();
+$end = (clone $start)->modify('+' . (6 + ((7 * $weeks) - 1)) . 'days');
+$events = $events->getEventsByDay($start, $end);
+
+require '../views/header.php';
+
 ?>
 
 <div class="d-flex flex-row align-items-center justify-content-between mx-sm-3">
@@ -23,7 +25,7 @@
 	</div>
 </div>
 
-<table class="calendar calendar-<?= $weeks ?>weeks">
+<table class="calendar calendar-<?= $weeks; ?>weeks">
 	<?php for($i = 0; $i < $weeks; $i++): ?>
 	<tr>
 		<?php 
@@ -55,6 +57,6 @@
 	<?php endfor; ?>
 </table>
 
-<?php
-	require '../views/footer.php';
-?>
+<a href="addEvent.php" class="button">+</a>
+
+<?php render('footer'); ?>

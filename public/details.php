@@ -1,28 +1,30 @@
 <?php
-	require '../src/Date/Events.php';
-	require '../src/Init.php';
 
-	$pdo = getPDO();
-	$details = new Calendar\Date\Events($pdo);
+require '../src/Date/Events.php';
+require '../src/Init.php';
 
-	if(!isset($_GET['id']))
-	{
-		header('location: ./404.php');
-	}
+$pdo = getPDO();
+$details = new Calendar\Date\Events($pdo);
 
-	try
-	{
-		$details = $details->find($_GET['id']);
-	}
-	catch(\Exception $e)
-	{
-		require './404.php';
-		exit();
-	}
+if(!isset($_GET['id']))
+{
+	header('location: ./404.php');
+}
 
-	dd($details);
+try
+{
+	$details = $details->find($_GET['id']);
+}
+catch(\Exception $e)
+{
+	require './404.php';
+	exit();
+}
 
-	render('header', ['title' => $details->getName()]);
+//dd($details);
+
+render('header', ['title' => $details->getName()]);
+
 ?>
 
 <h1><?= clean($details->getName()); ?></h1>
@@ -34,5 +36,5 @@
 </ul>
 
 <?php
-	require '../views/footer.php';
+render('footer');
 ?>
