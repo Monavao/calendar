@@ -15,6 +15,8 @@ class InputValidator extends Validator
 	{
 		parent::validates($data);
 		$this->validate('name', 'minLength', 3);
+		$this->validate('date', 'date');
+		$this->validate('start', 'compareTime', 'end');
 
 		return $this->errors;
 	}
