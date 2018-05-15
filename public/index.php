@@ -17,6 +17,16 @@ require '../views/header.php';
 
 ?>
 
+<?php if(isset($_GET['success'])): ?>
+
+<div class="container">
+	<div class="alert alert-success">
+		L'évènement a bien été ajouté au calendrier!
+	</div>
+</div>
+
+<?php endif; ?>
+
 <div class="d-flex flex-row align-items-center justify-content-between mx-sm-3">
 	<h1><?= $month->toString(); ?></h1>
 	<div>
@@ -44,11 +54,11 @@ require '../views/header.php';
 			</div>
 			<?php foreach($eventsOfDay as $event): ?>
 				<div>
-					<a href="./details.php?id=<?= $event['id'] ?>"><?= $event['name']; ?></a>
+					<a href="./edit.php?id=<?= $event['id'] ?>"><?= $event['name']; ?></a>
 					<br>
 					Début: <?= (new Datetime($event['start']))->format('H:i'); ?>
 					<br>
-					Fin: <?= (new Datetime($event['start']))->format('H:i'); ?>
+					Fin: <?= (new Datetime($event['end']))->format('H:i'); ?>
 				</div>
 			<?php endforeach; ?>
 		</td>	

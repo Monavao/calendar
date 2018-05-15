@@ -1,6 +1,5 @@
 <?php
 
-require '../src/Date/Events.php';
 require '../src/Init.php';
 
 $pdo = getPDO();
@@ -25,16 +24,14 @@ catch(\Exception $e)
 
 render('header', ['title' => $details->getName()]);
 
-?>
+?>dd
 
 <h1><?= clean($details->getName()); ?></h1>
 
 <ul>
-	<li>Date de début: <?= $details->getStart()->format('d-m-Y H:m'); ?></li>
-	<li>Date de fin: <?= $details->getEnd()->format('d-m-Y H:m'); ?></li>
+	<li>Date de début: <?= $details->getStart()->format('d-m-Y H:i'); ?></li>
+	<li>Date de fin: <?= $details->getEnd()->format('d-m-Y H:i'); ?></li>
 	<li>Description:<br><?= clean($details->getDescription()); ?></li>
 </ul>
 
-<?php
-render('footer');
-?>
+<?php render('footer'); ?>

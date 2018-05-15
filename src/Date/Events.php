@@ -77,4 +77,39 @@ class Events
 
 		return $result;
 	}
+
+	/**
+	 * Insert event in the database
+	 * @param Event $event 
+	 * @return bool
+	 */
+	public function create(Event $event) : bool
+	{
+		$stm = $this->pdo->prepare("INSERT INTO events (name, description, start, `end`) VALUES(?, ?, ?, ?)");
+
+		return $stm->execute([
+			$event->getName(),
+			$event->getDescription(),
+			$event->getStart()->format('Y-m-d H:i:s'),
+			$event->getEnd()->format('Y-m-d H:i:s')
+		]);
+	}
+
+	/**
+	 * Update event in the database
+	 * @param Event $event 
+	 * @return bool
+	 */
+	public function update(Event $event) : bool
+	{
+		$stm = $this->pdo->prepare("UPDATE events SET name = ?, description = ?, start = ?, end = ? WHERE id = ?");
+
+		return $stm->execute([
+			$event->getName(),
+			$event->getDescription(),
+			$event->getStart()->format('Y-m-d H:i:s'),
+			$event->getEnd()->format('Y-m-d H:i:s'),
+			$event->getId()
+		]);
+	}
 }

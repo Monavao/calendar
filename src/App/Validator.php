@@ -83,7 +83,7 @@ class Validator
 	 */
 	public function time(string $field) : bool
 	{
-		if(Datetime::createFromFormat('H:m', $this->data[$field]) === false)
+		if(Datetime::createFromFormat('H:i', $this->data[$field]) === false)
 		{
 			$this->errors[$field] = "Heure incorrecte";
 
@@ -103,8 +103,8 @@ class Validator
 	{
 		if($this->time($startField) && $this->time($endField))
 		{
-			$start = Datetime::createFromFormat('H:m', $this->data[$startField]);
-			$end = Datetime::createFromFormat('H:m', $this->data[$endField]);
+			$start = Datetime::createFromFormat('H:i', $this->data[$startField]);
+			$end = Datetime::createFromFormat('H:i', $this->data[$endField]);
 
 			if($start->getTimestamp() > $end->getTimestamp())
 			{
