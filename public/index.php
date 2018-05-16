@@ -17,7 +17,7 @@ require '../views/header.php';
 
 ?>
 
-<?php if(isset($_GET['success'])): ?>
+<?php if(isset($_GET['success']) && $_GET['success'] === '1'): ?>
 
 <div class="container">
 	<div class="alert alert-success">
@@ -25,6 +25,12 @@ require '../views/header.php';
 	</div>
 </div>
 
+<?php elseif(isset($_GET['success']) && $_GET['success'] === '2'): ?>
+	<div class="container">
+		<div class="alert alert-danger">
+			L'évènement a bien été supprimé du calendrier!
+		</div>
+	</div>
 <?php endif; ?>
 
 <div class="d-flex flex-row align-items-center justify-content-between mx-sm-3">
@@ -49,9 +55,9 @@ require '../views/header.php';
 					<?= $day; ?>
 				</div>
 			<?php endif; ?>
-			<div class="<?= $month->inMonth($date) ? 'day' : 'outOfMonth'; ?>">
+			<a href="addEvent.php?date=<?= $date->format('Y-m-d'); ?>" class="<?= $month->inMonth($date) ? 'day' : 'outOfMonth'; ?>">
 				<b><?= $date->format('d'); ?></b>
-			</div>
+			</a>
 			<?php foreach($eventsOfDay as $event): ?>
 				<div>
 					<a href="./edit.php?id=<?= $event['id'] ?>"><?= $event['name']; ?></a>

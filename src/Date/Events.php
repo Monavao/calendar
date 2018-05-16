@@ -4,6 +4,7 @@ namespace Calendar\Date;
 
 use \PDO;
 use \Exception;
+use \Datetime;
 
 class Events
 {
@@ -20,7 +21,7 @@ class Events
 	 * @param \Datetime $end
 	 * @return array
 	 */
-	public function getEvents(\DateTime $start, \Datetime $end) : array
+	public function getEvents(DateTime $start, Datetime $end) : array
 	{
 		$req = "SELECT * FROM events WHERE start BETWEEN '{$start->format('Y-m-d 00:00:00')}' AND '{$end->format('Y-m-d 23:59:59')}'";
 		$stm = $this->pdo->query($req);
@@ -35,7 +36,7 @@ class Events
 	 * @param \Datetime $end
 	 * @return array
 	 */
-	public function getEventsByDay(\DateTime $start, \Datetime $end) : array
+	public function getEventsByDay(DateTime $start, Datetime $end) : array
 	{
 		$events = $this->getEvents($start, $end);
 		$days = [];
@@ -111,5 +112,33 @@ class Events
 			$event->getEnd()->format('Y-m-d H:i:s'),
 			$event->getId()
 		]);
+	}
+
+	/**
+	 * Delete event in the database
+	 * @param Event $event 
+	 * @return bool
+	 */
+	public function delete(Event $event) : bool
+	{
+		$stm = $this->pdo->prepare("DELETE FROM events WHERE id = ?");
+
+		return $stm->execute([$event->getId()]);
+	}
+
+	/**
+	 * Inject data
+	 * @param Event $event 
+	 * @param array $data 
+	 * @return Event
+	 */
+	public function data(Event $event, array $data)
+	{
+		$event->setName($data['name']);
+		$event->setDescription($data['description']);
+		$event->setStart(Datetime::createFromFormat('Y-m-d H:i', $data['date'] . ' ' . $data['start'])->format("Y-m-d H:i:s"));
+		$event->setEnd(Datetime::createFromFormat('Y-m-d H:i', $data['date'] . ' ' . $data['end'])->format("Y-m-d H:i:s"));
+
+		return $event;
 	}
 }

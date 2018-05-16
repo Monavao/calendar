@@ -2,29 +2,33 @@
 
 require '../src/Init.php';
 
-use Calendar\Date\{Event, Events};
+use Calendar\Date\{Event, Events, InputValidator};
+use App\Validator;
 
-$data = [];
-$error = [];
+$data = [
+	'date' => $_GET['date'] ?? date('Y-m-d')
+];
+
+$validator = new Validator($data);
+
+if(!$validator->validate('date', 'date'))
+{
+	$data['date'] = date('Y-m-d');
+}
 
 if($_SERVER['REQUEST_METHOD'] === 'POST')
 {
 	$data = $_POST;
 	$errors = [];
-	$validator = new Calendar\Date\InputValidator();
+	$validator = new InputValidator();
 	$errors = $validator->validates($_POST);
 
 	if(empty($errors))
 	{
-		$event = new Event();
-		$event->setName($data['name']);
-		$event->setDescription($data['description']);
-		$event->setStart(Datetime::createFromFormat('Y-m-d H:i', $data['date'] . ' ' . $data['start'])->format("Y-m-d H:i:s"));
-		$event->setEnd(Datetime::createFromFormat('Y-m-d H:i', $data['date'] . ' ' . $data['end'])->format("Y-m-d H:i:s"));
-
 		$events = new Events(getPDO());
+		$event = $events->data(new Event(), $data);
 		$events->create($event);
-		// dd($event);
+
 		header('Location: ./index.php?success=1');
 		exit();
 	}

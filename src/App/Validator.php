@@ -9,6 +9,11 @@ class Validator
 	private $data;
 	protected $errors = [];
 
+	public function __construct(array $data = [])
+	{
+		$this->data = $data;
+	}
+
 	/**
 	 * Check values of data
 	 * @param array $data 
@@ -18,6 +23,8 @@ class Validator
 	{
 		$this->errors = [];
 		$this->data = $data;
+
+		return $this->errors;
 	}
 
 	/**
@@ -25,9 +32,9 @@ class Validator
 	 * @param string $field 
 	 * @param string $method 
 	 * @param type ...$parameters 
-	 * @return bool(false) | callback
+	 * @return bool
 	 */
-	public function validate(string $field, string $method, ...$parameters)
+	public function validate(string $field, string $method, ...$parameters) : bool
 	{
 		if(!isset($this->data[$field]))
 		{
@@ -37,7 +44,7 @@ class Validator
 		}
 		else
 		{
-			call_user_func([$this, $method], $field, ...$parameters);
+			return call_user_func([$this, $method], $field, ...$parameters);
 		}
 	}
 

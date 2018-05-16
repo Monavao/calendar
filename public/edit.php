@@ -2,8 +2,10 @@
 
 require '../src/Init.php';
 
+use Calendar\Date\{Events, InputValidator};
+
 $pdo = getPDO();
-$events = new Calendar\Date\Events($pdo);
+$events = new Events($pdo);
 $errors = [];
 
 if(!isset($_GET['id']))
@@ -31,17 +33,21 @@ $data = [
 
 if($_SERVER['REQUEST_METHOD'] === 'POST')
 {
+	if($_POST['delete'])
+	{
+		$events->delete($event);
+
+		header('Location: ./index.php?success=2');
+		exit();
+	}
+
 	$data = $_POST;
-	$validator = new Calendar\Date\InputValidator();
+	$validator = new InputValidator();
 	$errors = $validator->validates($data);
 
 	if(empty($errors))
 	{
-		$event->setName($data['name']);
-		$event->setDescription($data['description']);
-		$event->setStart(Datetime::createFromFormat('Y-m-d H:i', $data['date'] . ' ' . $data['start'])->format("Y-m-d H:i:s"));
-		$event->setEnd(Datetime::createFromFormat('Y-m-d H:i', $data['date'] . ' ' . $data['end'])->format("Y-m-d H:i:s"));
-
+		$events->data($event, $data);
 		$events->update($event);
 
 		header('Location: ./index.php?success=1');
@@ -57,8 +63,17 @@ render('header', ['title' => $event->getName()]);
 	<h1>Editer <?= clean($event->getName()); ?></h1>
 	<form action="" method="post" class="form">
 		<?php render('calendar/form', ['data' => $data, 'errors' => $errors]); ?>
-		<div class="form-group">
-			<button class="btn btn-primary">Editer</button>
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					<button class="btn btn-primary">Editer</button>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="form-group">
+					<button class="btn btn-danger" value="delete" name="delete">Supprimer</button>
+				</div>
+			</div>
 		</div>
 	</form>
 </div>
