@@ -4,7 +4,7 @@ namespace Calendar\Date;
 
 use \PDO;
 use \Exception;
-use \Datetime;
+use \DateTimeImmutable;
 
 class Events
 {
@@ -17,14 +17,15 @@ class Events
 
 	/**
 	 * Get elements between two dates
-	 * @param \DateTime $start
-	 * @param \Datetime $end
-	 * @return array
+	 * @param \DateTimeImmutable $start
+	 * @param \DateTimeImmutable $end
+	 * @return Event[]
 	 */
-	public function getEvents(DateTime $start, Datetime $end) : array
+	public function getEvents(DateTimeImmutable $start, DateTimeImmutable $end) : array
 	{
 		$req = "SELECT * FROM events WHERE start BETWEEN '{$start->format('Y-m-d 00:00:00')}' AND '{$end->format('Y-m-d 23:59:59')}'";
 		$stm = $this->pdo->query($req);
+		$stm->setFetchMode(PDO::FETCH_CLASS, Event::class);
 		$result = $stm->fetchAll();
 
 		return $result;
@@ -32,18 +33,18 @@ class Events
 
 	/**
 	 * Get elements between two dates by day
-	 * @param \DateTime $start
-	 * @param \Datetime $end
+	 * @param \DateTimeImmutable $start
+	 * @param \DateTimeImmutable $end
 	 * @return array
 	 */
-	public function getEventsByDay(DateTime $start, Datetime $end) : array
+	public function getEventsByDay(DateTimeImmutable $start, DateTimeImmutable $end) : array
 	{
 		$events = $this->getEvents($start, $end);
 		$days = [];
 
 		foreach ($events as $event)
 		{
-			$date = explode(' ', $event['start'])[0];
+			$date = $event->getStart()->format('Y-m-d');
 
 			if(!isset($days[$date]))
 			{

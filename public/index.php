@@ -10,7 +10,7 @@ $month = new Month($_GET['month'] ?? null, $_GET['year'] ?? null);
 $start = $month->getFirstDay();
 $start = $start->format('N') === '1' ? $start : $month->getFirstDay()->modify('last monday');
 $weeks = $month->getWeeks();
-$end = (clone $start)->modify('+' . (6 + ((7 * $weeks) - 1)) . 'days');
+$end = $start->modify('+' . (6 + ((7 * $weeks) - 1)) . 'days');
 $events = $events->getEventsByDay($start, $end);
 
 require '../views/header.php';
@@ -46,7 +46,7 @@ require '../views/header.php';
 	<tr>
 		<?php 
 			foreach($month->days as $k => $day):
-			$date = (clone $start)->modify('+'. ($k + ($i * 7)) . "days");
+			$date = $start->modify('+'. ($k + ($i * 7)) . "days");
 			$eventsOfDay = $events[$date->format('Y-m-d')] ?? [];
 		?>
 		<td>
@@ -60,11 +60,11 @@ require '../views/header.php';
 			</a>
 			<?php foreach($eventsOfDay as $event): ?>
 				<div>
-					<a href="./edit.php?id=<?= $event['id'] ?>"><?= $event['name']; ?></a>
+					<a href="./edit.php?id=<?= $event->getId() ?>"><?= $event->getName(); ?></a>
 					<br>
-					Début: <?= (new Datetime($event['start']))->format('H:i'); ?>
+					Début: <?= $event->getStart()->format('H:i'); ?>
 					<br>
-					Fin: <?= (new Datetime($event['end']))->format('H:i'); ?>
+					Fin: <?= $event->getEnd()->format('H:i'); ?>
 				</div>
 			<?php endforeach; ?>
 		</td>	

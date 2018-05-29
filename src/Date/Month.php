@@ -56,11 +56,11 @@ class Month
 
 	/**
 	 * Return first day of the month
-	 * @return \Datetime
+	 * @return \DateTimeImmutable
 	 */
-	public function getFirstDay() : \DateTime
+	public function getFirstDay() : \DateTimeImmutable
 	{
-		return new \DateTime("{$this->year}-{$this->month}-01");
+		return new \DateTimeImmutable("{$this->year}-{$this->month}-01");
 	}
 
 	/**
@@ -79,14 +79,13 @@ class Month
 	public function getWeeks() : int
 	{
 		$start = $this->getFirstDay();
-		$end = (clone $start)->modify('+1 month -1 day');
-
+		$end = $start->modify('+1 month -1 day');
 		$startWeek = intval($start->format('W'));
 		$endWeek = intval($end->format('W'));
 
 		if($endWeek === 1)
 		{
-			$endWeek = intval((clone $end)->modify('- 7 days')->format('W') + 1);
+			$endWeek = intval($end->modify('- 7 days')->format('W') + 1);
 		}
 
 		$weeks = $endWeek - $startWeek + 1;
@@ -101,10 +100,10 @@ class Month
 
 	/**
 	 * Return true if days is in currently month
-	 * @param \Datetime $date 
+	 * @param \DateTimeImmutable $date 
 	 * @return bool
 	 */
-	public function inMonth(\Datetime $date) : bool
+	public function inMonth(\DateTimeImmutable $date) : bool
 	{
 		return $this->getFirstDay()->format('Y-m') === $date->format('Y-m');
 	}

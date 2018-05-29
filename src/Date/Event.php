@@ -2,7 +2,7 @@
 
 namespace Calendar\Date;
 
-use \Datetime;
+use \DateTimeImmutable;
 
 class Event
 {
@@ -27,14 +27,14 @@ class Event
 		return $this->description ?? '';
 	}
 
-	public function getStart() : Datetime
+	public function getStart() : DatetimeImmutable
 	{
-		return new Datetime($this->start);
+		return new DateTimeImmutable($this->start);
 	}
 
-	public function getEnd() : Datetime
+	public function getEnd() : DateTimeImmutable
 	{
-		return new Datetime($this->end);
+		return new DateTimeImmutable($this->end);
 	}
 
 	public function setName(string $name)
